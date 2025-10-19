@@ -1,0 +1,12 @@
+{
+  "name": "webnb",
+  "version": "1.0.0",
+  "description": "Proyecto mínimo listo para: - Mostrar dashboards públicos - Restringir dashboards privados a usuarios del grupo **Privados** - Enlazar el `.ipynb` correspondiente (descarga) - Cargar datos desde `data/dashboards.csv` - Crear 3 usuarios preconfigurados desde `.env` (contraseñas ENCRIPTADAS con `set_password`)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

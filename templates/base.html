@@ -1,40 +1,106 @@
-
 <!doctype html>
 <html lang="es">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Analisis de datos{% endblock %}</title>
-    <style>
-        body{font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif; margin:0; background:#f7f7f7;}
-        header{background:#0f172a;color:white;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
-        a{color:#0ea5e9;text-decoration:none}
-        table{width:100%;border-collapse:collapse;background:white}
-        th,td{padding:10px;border-bottom:1px solid #eee;text-align:left}
-        .container{max-width:1000px;margin:24px auto;padding:0 12px}
-        .badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px}
-        .badge-green{background:#dcfce7;color:#166534}
-        .badge-gray{background:#e5e7eb;color:#374151}
-        .badge-red{background:#fee2e2;color:#991b1b}
-        .btn{display:inline-block;padding:8px 12px;border-radius:8px;background:#111827;color:white}
-        .btn-outline{background:white;color:#111827;border:1px solid #d1d5db}
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Análisis de Datos{% endblock %}</title>
+
+  <style>
+    :root{
+      --bg:#0f172a; --accent:#0ea5e9; --text:#f1f5f9;
+      --muted:#94a3b8; --ring:#334155; --radius:12px;
+    }
+    body{font-family:'Segoe UI', Roboto, system-ui, sans-serif;margin:0;background:#f7f7f7;color:#0f172a}
+    /* NAVBAR base */
+    .nav{
+      position:sticky; top:0; z-index:1000;
+      background:var(--bg); color:var(--text);
+      padding:12px 16px; box-shadow:0 2px 8px rgba(0,0,0,.12);
+    }
+    .nav__inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.3px;color:var(--accent);text-decoration:none}
+    .brand span{color:var(--text);opacity:.9;font-weight:600}
+    /* Toggle (hamburger) */
+    #nav-toggle{display:none}
+    .burger{
+      display:none; cursor:pointer; border:1px solid var(--ring); border-radius:10px; padding:8px;
+    }
+    .burger span{display:block;width:22px;height:2px;background:var(--text);margin:4px 0;transition:.2s}
+    /* Links */
+    .nav__links{display:flex;align-items:center;gap:10px}
+    .nav__links a,.btn,.btn-outline{
+      display:inline-block; padding:8px 12px; border-radius:10px; font-size:.92rem; font-weight:500; text-decoration:none; transition:.2s
+    }
+    a{color:var(--accent)}
+    .btn{background:var(--accent); color:white}
+    .btn:hover{filter:brightness(.95); transform:translateY(-1px)}
+    .btn-outline{color:var(--text); border:1px solid var(--ring)}
+    .btn-outline:hover{background:#1e293b}
+    .hello{color:var(--text);opacity:.85;margin-right:4px}
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 820px){
+      .burger{display:block}
+      .nav__inner{align-items:center}
+      .nav__links{
+        position:relative;
+      }
+      /* menú colapsable */
+      .nav__menu{
+        display:none;              /* oculto por defecto */
+        position:absolute; right:0; left:0; top:52px;
+        background:var(--bg);
+        border-top:1px solid var(--ring);
+        padding:12px;
+        display:flex; flex-direction:column; gap:10px;
+        border-bottom-left-radius:12px; border-bottom-right-radius:12px;
+      }
+      /* al activar el checkbox, se muestra */
+      #nav-toggle:checked ~ .nav__menu{display:flex}
+      /* reflow del contenedor (para stacking correcto) */
+      .nav{padding-bottom:0}
+      .nav__inner{position:relative}
+      .hello{display:block;margin:6px 0}
+    }
+  </style>
 </head>
+
 <body>
-    <header>
-        <strong>Analisis de Datos</strong>
-        <nav>
-            {% if user.is_authenticated %}
-                <span style="margin-right:12px;">Hola, {{ user.username }}</span>
-                <a href="{% url 'logout' %}" class="btn-outline">Salir</a>
-            {% else %}
-                <a href="{% url 'login' %}" class="btn">Ingresar</a>
-                <a href="{% url 'dashboard_list' %}" class="btn">Home</a>
-            {% endif %}
-        </nav>
-    </header>
-    <div class="container">
-        {% block content %}{% endblock %}
+  <header class="nav">
+    <div class="nav__inner">
+      <a class="brand" href="{% url 'dashboard_list' %}">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 13h6v7H4v-7Zm10-9h6v16h-6V4ZM4 4h6v7H4V4Zm10 11h6v5h-6v-5Z" fill="currentColor" opacity=".9"/>
+        </svg>
+        <span>Análisis de Datos</span>
+      </a>
+
+      <!-- checkbox para controlar el menú móvil -->
+      <input type="checkbox" id="nav-toggle" />
+
+      <!-- botón hamburguesa -->
+      <label class="burger" for="nav-toggle" aria-label="Abrir menú" title="Menú">
+        <span></span><span></span><span></span>
+      </label>
+
+      <!-- enlaces desktop -->
+      <nav class="nav__links">
+        <!-- En móvil, este bloque se renderiza dentro de .nav__menu mediante CSS (ver abajo) -->
+        <div class="nav__menu">
+          {% if user.is_authenticated %}
+            <span class="hello">👋 Hola, {{ user.username }}</span>
+            <a href="{% url 'logout' %}" class="btn-outline">Salir</a>
+          {% else %}
+            <a href="{% url 'dashboard_list' %}" class="btn-outline">Inicio</a>
+            <a href="{% url 'login' %}" class="btn">Ingresar</a>
+          {% endif %}
+        </div>
+      </nav>
     </div>
+  </header>
+
+  <div class="container" style="max-width:1000px;margin:24px auto;padding:0 16px;">
+    {% block content %}{% endblock %}
+  </div>
 </body>
 </html>

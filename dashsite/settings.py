@@ -20,6 +20,9 @@ INSTALLED_APPS = [
     'dashboards',
 ]
 
+
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

@@ -1,28 +1,112 @@
-
 {% extends 'base.html' %}
 {% block content %}
-<h2>Listado de Dashboards {% if not show_private %}<span class="badge badge-gray">Solo públicos</span>{% endif %}</h2>
-<table style="margin-top:12px;">
-    <thead>
-        <tr><th>Área</th><th>Nombre</th><th>Fuente</th><th>Privado</th><th>Acciones</th></tr>
-    </thead>
-    <tbody>
-        {% for d in dashboards %}
-        <tr>
-            <td>{{ d.area }}</td>
-            <td>{{ d.nombre }}</td>
-            <td>{{ d.fuente }}</td>
-            <td>{% if d.esprivado %}<span class="badge badge-red">Privado</span>{% else %}<span class="badge badge-green">Público</span>{% endif %}</td>
-            <td>
-                <a class="btn-outline" href="{% url 'dashboard_detail' d.pk %}">Ver</a>
-                {% if d.notebook_path %}
-                <a class="btn-outline" href="{% url 'download_notebook' d.pk %}">Notebook</a>
-                {% endif %}
-            </td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="5">No hay dashboards cargados.</td></tr>
-        {% endfor %}
-    </tbody>
-</table>
+
+<section class="dashboards-grid">
+  <header class="section-header">
+    <h2 class="section-title">
+      Listado de Dashboards
+      {% if not show_private %}
+        <span class="badge badge-gray">Solo públicos</span>
+      {% endif %}
+    </h2>
+  </header>
+
+  {% if dashboards %}
+    <div class="cards-container">
+      {% for d in dashboards %}
+      <article class="dashboard-card {% if d.esprivado %}private{% else %}public{% endif %}">
+        <div class="card-header">
+          <h3 title="{{ d.nombre }}">{{ d.nombre }}</h3>
+          {% if d.esprivado %}
+            <span class="badge badge-red">Privado</span>
+          {% else %}
+            <span class="badge badge-green">Público</span>
+          {% endif %}
+        </div>
+
+        <div class="card-body">
+          <p><strong>Área:</strong> {{ d.area }}</p>
+          <p><strong>Fuente:</strong> {{ d.fuente }}</p>
+        </div>
+
+        <div class="card-footer">
+          <a class="btn-outline small" href="{% url 'dashboard_detail' d.pk %}">Ver Dashboard</a>
+          {% if d.notebook_path %}
+            <a class="btn small" href="{% url 'download_notebook' d.pk %}">Notebook</a>
+          {% endif %}
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="no-data">No hay dashboards cargados.</p>
+  {% endif %}
+</section>
+
+<style>
+  /* Contenedor principal en coherencia con el layout */
+  .dashboards-grid{
+    background:#fff;border-radius:12px;padding:24px;
+    box-shadow:0 2px 8px rgba(0,0,0,.05);animation:fadeIn .25s ease-in;
+  }
+  .section-header{display:flex;justify-content:space-between;align-items:center;
+    border-bottom:1px solid #e2e8f0;padding-bottom:10px;margin-bottom:20px;}
+  .section-title{font-size:1.4rem;font-weight:600;color:#0f172a;display:flex;gap:8px;align-items:center;}
+
+  /* Grid de tarjetas */
+  .cards-container{
+    display:grid;gap:20px;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  }
+
+  .dashboard-card{
+    background:#fff;border-radius:12px;padding:16px 20px;border:1px solid #e2e8f0;
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
+    transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    display:flex;flex-direction:column;min-height:160px;
+  }
+  .dashboard-card:hover{transform:translateY(-4px);box-shadow:0 6px 16px rgba(0,0,0,.08);border-color:#dbe3ea;}
+  .dashboard-card.private{border-left:4px solid #dc2626;}
+  .dashboard-card.public{border-left:4px solid #16a34a;}
+
+  .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+  .card-header h3{margin:0;font-size:1.05rem;font-weight:600;color:#0f172a;line-height:1.2;}
+  .card-body{flex:1;color:#334155;font-size:.95rem;line-height:1.4;margin-bottom:12px;}
+  .card-body p{margin:4px 0;}
+
+  .card-footer{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+  .btn.small{padding:6px 10px;font-size:.85rem;}
+  .btn-outline.small{padding:6px 10px;font-size:.85rem;}
+
+  .no-data{text-align:center;color:#64748b;padding:20px;font-style:italic;}
+
+    /* Botones dentro de tarjetas: alto contraste en fondo claro */
+    .dashboard-card .btn-outline{
+    color:#0f172a;                 /* texto oscuro visible */
+    border:1px solid #cbd5e1;      /* borde gris suave */
+    background:transparent;
+    }
+    .dashboard-card .btn-outline:hover{
+    background:#eef2f7;            /* leve hover */
+    border-color:#b6c3d1;
+    }
+
+    /* Por si algún enlace hereda un color claro */
+    .dashboard-card, 
+    .dashboard-card a{
+    color:#0f172a;
+    }
+    .dashboard-card .badge-red{ color:#991b1b; }
+    .dashboard-card .badge-green{ color:#166534; }
+
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+  /* Ajustes responsive suaves */
+  @media (max-width:600px){
+    .section-title{font-size:1.2rem}
+    .dashboard-card{padding:14px}
+    .card-header h3{font-size:1rem}
+  }
+</style>
+
 {% endblock %}

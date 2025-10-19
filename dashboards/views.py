@@ -9,7 +9,9 @@ from .models import Dashboard
 
 def user_can_view_private(user):
     if not user.is_authenticated:
+        print( "User not authenticated" ,user)
         return False
+
     try:
         group = Group.objects.get(name=os.getenv('PRIVATE_GROUP_NAME','Privados'))
         return group in user.groups.all() or user.is_superuser

@@ -1,11 +1,150 @@
-
 {% extends 'base.html' %}
-{% block title %}Ingresar{% endblock %}
+{% block title %}Iniciar Sesión{% endblock %}
+
 {% block content %}
-  <h2>Iniciar sesión</h2>
-  <form method="post" style="margin-top:12px;background:white;padding:16px;border-radius:8px;">
+<section class="login-section">
+  <header class="section-header">
+    <h2 class="section-title">Iniciar sesión</h2>
+  </header>
+
+  <form method="post" class="login-form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn" type="submit">Entrar</button>
+
+    <div class="form-fields">
+    {% for field in form %}
+      <p>
+        <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+        {{ field }}
+        {% for error in field.errors %}
+          <span class="field-error">{{ error }}</span>
+        {% endfor %}
+      </p>
+      {% endfor %}
+    </div>
+
+    {% if form.non_field_errors %}
+      <div class="form-error">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+
+    <button type="submit" class="btn submit-btn">Entrar</button>
   </form>
+</section>
+
+<style>
+  .login-section {
+    max-width: 420px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 28px;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    animation: fadeIn .3s ease-in-out;
+  }
+
+  .section-header {
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+  }
+
+  .section-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #0f172a;
+  }
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    
+  }
+
+  .form-fields p {
+    margin-bottom: 14px;
+   
+  }
+
+  label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #334155;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px 12px;
+    width: 92%;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background: #f8fafc;
+  }
+
+  input:focus {
+    outline: none;
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 3px rgba(14,165,233,0.2);
+    background: white;
+  }
+
+  .submit-btn {
+    padding: 10px 16px;
+    font-size: 1rem;
+    border-radius: 8px;
+    background: #0ea5e9;
+    color: white;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+  }
+
+  .submit-btn:hover {
+    background: #0284c7;
+    transform: translateY(-1px);
+  }
+
+  /* --- Estilo del mensaje de error --- */
+  .form-error {
+    color: #dc2626; /* rojo institucional */
+    font-size: 0.9rem;
+    background: #fee2e2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 4px;
+  }
+
+  .form-error ul {
+    list-style: none; /* sin viñetas */
+    margin: 0;
+    padding: 0;
+  }
+
+  .form-error li {
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 480px) {
+    .login-section {
+      margin: 20px 12px;
+      padding: 20px;
+    }
+    .section-title {
+      font-size: 1.2rem;
+    }
+  }
+</style>
 {% endblock %}

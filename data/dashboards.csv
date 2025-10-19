@@ -1,0 +1,6 @@
+area,nombre,fuente,linkapowerbi,esprivado
+Talento Humano,Clima Laboral,TH,https://app.powerbi.com/view?r=climalaboral,FALSE
+Talento Humano,Rotación de Personal,TH,https://app.powerbi.com/view?r=rotacionpersonal,TRUE
+Académico,Admisiones 2025,SNIES,https://app.powerbi.com/view?r=adm2025,FALSE
+Financiero,Presupuesto Institucional,SAP,https://app.powerbi.com/view?r=presupuesto,TRUE
+Planta Física,Mantenimiento de Sedes,Infraestructura,https://app.powerbi.com/view?r=mantenimientos,FALSE

@@ -1,0 +1,14 @@
+
+{% extends 'base.html' %}
+{% block title %}{{ d.nombre }}{% endblock %}
+{% block content %}
+  <h2 style="margin-bottom:8px;">{{ d.area }} › {{ d.nombre }}</h2>
+  <p><strong>Fuente:</strong> {{ d.fuente }} {% if d.esprivado %}<span class="badge badge-red">Privado</span>{% else %}<span class="badge badge-green">Público</span>{% endif %}</p>
+  <div style="margin:16px 0;background:white;padding:8px;border-radius:8px;">
+    <iframe title="PowerBI" width="100%" height="500" src="{{ d.linkapowerbi }}" frameborder="0" allowfullscreen="true"></iframe>
+  </div>
+  {% if d.notebook_path %}
+    <p><a class="btn" href="{% url 'download_notebook' d.pk %}">Descargar Notebook (.ipynb)</a></p>
+  {% endif %}
+  <p><a href="{% url 'dashboard_list' %}">← Volver al listado</a></p>
+{% endblock %}

@@ -17,4 +17,5 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', logout_view, name='logout'),
     path('download/<int:pk>/', v.download_notebook, name='download_notebook'),
+    path('notebook/<int:pk>/', v.view_notebook, name='view_notebook'),  
 ]
